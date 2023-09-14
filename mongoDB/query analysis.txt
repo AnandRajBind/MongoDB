@@ -1,0 +1,83 @@
+weather> db.weather_data.find({type:'SAO'}).explain("executionStats");
+{
+  explainVersion: '2',
+  queryPlanner: {
+    namespace: 'weather.weather_data',
+    indexFilterSet: false,
+    parsedQuery: { type: { '$eq': 'SAO' } },
+    queryHash: '148B1959',
+    planCacheKey: 'DEF5D99F',
+    maxIndexedOrSolutionsReached: false,
+    maxIndexedAndSolutionsReached: false,
+    maxScansToExplodeReached: false,
+    winningPlan: {
+      queryPlan: {
+        stage: 'COLLSCAN',
+        planNodeId: 1,
+        filter: { type: { '$eq': 'SAO' } },
+        direction: 'forward'
+      },
+      slotBasedPlan: {
+        slots: '$$RESULT=s5 env: { s1 = TimeZoneDatabase(Asia/Amman...America/Virgin) (timeZoneDB), s7 = "SAO", s2 = Nothing (SEARCH_META), s3 = 1694661385793 (NOW) }',
+        stages: '[1] filter {traverseF(s4, lambda(l1.0) { ((l1.0 == s7) ?: false) }, false)} \n' +
+          '[1] scan s5 s6 none none none none lowPriority [s4 = type] @"b36a47f5-9e2f-48f4-bb68-3bfcbaacc408" true false '
+      }
+    },
+    rejectedPlans: []
+  },
+  executionStats: {
+    executionSuccess: true,
+    nReturned: 6,
+    executionTimeMillis: 13,
+    totalKeysExamined: 0,
+    totalDocsExamined: 9991,
+    executionStages: {
+      stage: 'filter',
+      planNodeId: 1,
+      nReturned: 6,
+      executionTimeMillisEstimate: 10,
+      opens: 1,
+      closes: 1,
+      saveState: 9,
+      restoreState: 9,
+      isEOF: 1,
+      numTested: 9991,
+      filter: 'traverseF(s4, lambda(l1.0) { ((l1.0 == s7) ?: false) }, false) ',
+      inputStage: {
+        stage: 'scan',
+        planNodeId: 1,
+        nReturned: 9991,
+        executionTimeMillisEstimate: 10,
+        opens: 1,
+        closes: 1,
+        saveState: 9,
+        restoreState: 9,
+        isEOF: 1,
+        numReads: 9991,
+        recordSlot: 5,
+        recordIdSlot: 6,
+        fields: [ 'type' ],
+        outputSlots: [ Long("4") ]
+      }
+    }
+  },
+  command: { find: 'weather_data', filter: { type: 'SAO' }, '$db': 'weather' },
+  serverInfo: {
+    host: 'DESKTOP-I8DHPI9',
+    port: 27017,
+    version: '7.0.1',
+    gitVersion: '425a0454d12f2664f9e31002bbe4a386a25345b5'
+  },
+  serverParameters: {
+    internalQueryFacetBufferSizeBytes: 104857600,
+    internalQueryFacetMaxOutputDocSizeBytes: 104857600,
+    internalLookupStageIntermediateDocumentMaxSizeBytes: 104857600,
+    internalDocumentSourceGroupMaxMemoryBytes: 104857600,
+    internalQueryMaxBlockingSortMemoryUsageBytes: 104857600,
+    internalQueryProhibitBlockingMergeOnMongoS: 0,
+    internalQueryMaxAddToSetBytes: 104857600,
+    internalDocumentSourceSetWindowFieldsMaxMemoryBytes: 104857600,
+    internalQueryFrameworkControl: 'trySbeEngine'
+  },
+  ok: 1
+}

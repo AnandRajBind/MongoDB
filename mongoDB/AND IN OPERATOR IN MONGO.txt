@@ -1,0 +1,88 @@
+------
+   The server generated these startup warnings when booting
+   2023-09-08T15:47:10.157+05:30: Access control is not enabled for the database. Read and write access to data and configuration is unrestricted
+------
+
+test>
+
+test> show databases;
+admin       40.00 KiB
+config      72.00 KiB
+local       40.00 KiB
+university  72.00 KiB
+weather      5.00 MiB
+test> use weather;
+switched to db weather
+weather> show  collection;
+MongoshInvalidInputError: [COMMON-10001] 'collection' is not a valid argument for "show".
+weather> show  collections;
+weather_data
+weather> db.weather_data.find({"dewPoint.value": {$lt: 999,$gt:500}}).count();
+0
+weather> db.weather_data.find({"dewPoint.value": {$lt: 999,$gt:200}}).count();
+0
+weather> db.weather_data.find({"dewPoint.value": {$lt: 299,$gt:200}}).count();
+0
+weather> db.weather_data.find($and: [{"dewPoint.value": {$lt: 299}}, {"dewPoint.value":{$gt: 990}}]).count();
+Uncaught:
+SyntaxError: Unexpected token, expected "," (1:25)
+
+> 1 | db.weather_data.find($and: [{"dewPoint.value": {$lt: 299}}, {"dewPoint.value":{$gt: 990}}]).count();
+    |                          ^
+  2 |
+
+weather> db.weather_data.find({$and: [{"dewPoint.value": {$lt: 299}}, {"dewPoint.value":{$gt: 990}}]}).count();
+0
+weather> db.weather_data.updateMany({type:"SAO"},{$set:{elevation:5000}});
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 6,
+  modifiedCount: 6,
+  upsertedCount: 0
+}
+weather> db.weather_data.find({$and:[{elevation:{$lt:8000}}, {elevation:{$gt:1000}}]}).count();
+6
+weather> db.weather_data.find({callLetters:{"3EHH", "3EIZ", "3EJF"}}).count();
+Uncaught:
+SyntaxError: Unexpected token (1:41)
+
+> 1 | db.weather_data.find({callLetters:{"3EHH", "3EIZ", "3EJF"}}).count();
+    |                                          ^
+  2 |
+
+weather> db.weather_data.find({callLetters:{"3EHH", "3EIZ", "3EJF"}}).count();
+Uncaught:
+SyntaxError: Unexpected token (1:41)
+
+> 1 | db.weather_data.find({callLetters:{"3EHH", "3EIZ", "3EJF"}}).count();
+    |                                          ^
+  2 |
+
+weather> db.weather_data.find({callLetters:{$in:{"3EHH", "3EIZ", "3EJF"}}).count();
+Uncaught:
+SyntaxError: Unexpected token (1:46)
+
+> 1 | db.weather_data.find({callLetters:{$in:{"3EHH", "3EIZ", "3EJF"}}).count();
+    |                                               ^
+  2 |
+
+weather> db.weather_data.find({callLetters:{$in:{"3EHH", "3EIZ", "3EJF"}}}).count();
+Uncaught:
+SyntaxError: Unexpected token (1:46)
+
+> 1 | db.weather_data.find({callLetters:{$in:{"3EHH", "3EIZ", "3EJF"}}}).count();
+    |                                               ^
+  2 |
+
+weather> db.weather_data.find({callLetters:{$in:["3EHH", "3EIZ", "3EJF"}]}).count();
+Uncaught:
+SyntaxError: Unexpected token, expected "," (1:62)
+
+> 1 | db.weather_data.find({callLetters:{$in:["3EHH", "3EIZ", "3EJF"}]}).count();
+    |                                                               ^
+  2 |
+
+weather> db.weather_data.find({callLetters:{$in:["3EHH", "3EIZ", "3EJF"]}}).count();
+17
+weather>
